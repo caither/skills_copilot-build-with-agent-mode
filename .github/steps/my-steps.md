@@ -60,7 +60,11 @@ mongosh --eval "use octofit_db; show collections; db.users.findOne(); db.teams.f
 
 ```
 cd /workspaces/skills_copilot-build-with-agent-mode/octofit-tracker/backend && source venv/bin/activate && python manage.py test
+```
 
+#### to update the Python Django project/app files
+
+```
 
 ```
 
