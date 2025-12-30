@@ -8,13 +8,18 @@ die() {
   exit 1
 }
 
-# Ensure CODESPACE_NAME is set
-: "${CODESPACE_NAME:?CODESPACE_NAME environment variable not set. This script should be run in a GitHub Codespace environment.}"
+# Ensure CODESPACE_NAME is set, default to localhost if not in Codespace
+CODESPACE_NAME="${CODESPACE_NAME:-localhost}"
+echo "Using CODESPACE_NAME: $CODESPACE_NAME"
 
-# Port visibility setup
-echo "Setting port visibility..."
-gh cs ports visibility 8000:public -c "$CODESPACE_NAME" || die "Failed to set 8000 public"
-gh cs ports visibility 3000:public -c "$CODESPACE_NAME" || die "Failed to set 3000 public"
+# Port visibility setup (only if not localhost)
+if [ "$CODESPACE_NAME" != "localhost" ]; then
+  echo "Setting port visibility..."
+  gh cs ports visibility 8000:public -c "$CODESPACE_NAME" || die "Failed to set 8000 public"
+  gh cs ports visibility 3000:public -c "$CODESPACE_NAME" || die "Failed to set 3000 public"
+else
+  echo "Running on localhost - skipping GitHub Codespace port visibility setup"
+fi
 
 echo "Preparing MongoDB data dir..."
 sudo mkdir -p /data/db || die "mkdir failed"

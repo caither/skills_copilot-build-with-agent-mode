@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.views.generic import RedirectView
 from rest_framework import routers
 from .views import UserViewSet, TeamViewSet, ActivityViewSet, WorkoutViewSet, LeaderboardViewSet, api_root
 
@@ -27,6 +28,8 @@ router.register(r'leaderboards', LeaderboardViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', api_root, name='api-root'),
-    path('', include(router.urls)),
+    # 由於這是 REST API 專案，將根路徑重定向到 /api/ 首頁
+    path('', RedirectView.as_view(url='api/', permanent=False), name='home'),
+    path('api/', api_root, name='api-root'),
+    path('api/', include(router.urls)),
 ]
