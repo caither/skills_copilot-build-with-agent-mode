@@ -312,3 +312,52 @@ API 文件標記為「規劃中」，當實際 Django 後端建立後需要更�
   ---
 - Notes: 時間為範例，請依實際執行時自動填入 ISO 8601 Zulu 格式。
 
+---
+
+### 2025-12-30T00:00:00Z
+- Scope: octofit-tracker/backend/octofit_tracker/urls.py, README.md, docs/Prompt-Output.md
+- Prompt: 移除 BASE_DOMAIN 中硬編碼的 localhost:8000，改為非 Codespace 時使用相對回退路徑
+- Output:
+步驟（簡短）
+1. 移除硬編碼 localhost 與埠號，改為在非 Codespace 時使用相對路徑回退（/api）。  
+2. 更新 README.md 說明回退行為。  
+3. 依指令在 docs/Prompt-Output.md 追加本次輸出記錄。
+
+/workspaces/skills_copilot-build-with-agent-mode/octofit-tracker/backend/octofit_tracker/urls.py
+
+將非 Codespace 的 BASE_DOMAIN 改為不硬編碼 localhost，而使用相對回退路徑。
+
+```python
+# filepath: /workspaces/skills_copilot-build-with-agent-mode/octofit-tracker/backend/octofit_tracker/urls.py
+# ...existing code...
+# Get Codespace name for URL generation
+CODESPACE_NAME = os.getenv('CODESPACE_NAME')
+
+# 當在 Codespace 中運行時，使用 Codespace 的完整 domain 以避免 HTTPS 憑證問題
+if CODESPACE_NAME:
+    BASE_DOMAIN = f'https://{CODESPACE_NAME}-8000.app.github.dev'
+    API_BASE_URL = f'{BASE_DOMAIN}/api'
+    ROOT_REDIRECT = f'{BASE_DOMAIN}/api/'
+else:
+    # 不再硬編碼 localhost 與埠號，改為使用相對路徑回退（可安全在任何 host 下運作）
+    BASE_DOMAIN = None
+    API_BASE_URL = '/api'
+    ROOT_REDIRECT = '/api/'
+# ...existing code...
+```
+
+/workspaces/skills_copilot-build-with-agent-mode/README.md
+
+```markdown
+# filepath: /workspaces/skills_copilot-build-with-agent-mode/README.md
+# ...existing code...
+## 在 GitHub Codespaces 中運行
+若在 GitHub Codespaces 中啟動後端，系統會讀取環境變數 `CODESPACE_NAME` 並自動將根路徑與 API 基底 URL 指向：
+`https://$CODESPACE_NAME-8000.app.github.dev`。若未設定 `CODESPACE_NAME`，則會回退為相對路徑 `/api`（不再硬編碼 localhost 與埠號），以避免對特定 host 的假設。
+# ...existing code...
+```
+
+- Notes: N/A
+- Notes: N/A
+- Notes: N/A
+

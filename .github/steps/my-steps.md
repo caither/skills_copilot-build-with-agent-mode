@@ -93,13 +93,13 @@ cd /workspaces/skills_copilot-build-with-agent-mode/octofit-tracker/backend && s
 ```md
 請為 Codespace 設定對應的 URL。
 - 所有 Django 專案檔案皆位於 `octofit-tracker/backend/octofit_tracker` 目錄中。
+- *請勿更新 `views.py`*。
 - **僅**更新 `settings.py` 與 `urls.py` 中與 URL 相關的設定。
 - REST API 端點格式為：
   `https://$CODESPACE_NAME-8000.app.github.dev/api/[component]/`
 - 完整 URL 範例：
   `https://$CODESPACE_NAME-8000.app.github.dev/api/activities/`
 - 請勿硬編碼 `$CODESPACE_NAME`，必須使用環境變數。
-- 請勿更新 `views.py`。
 
 1. 更新 `urls.py`，將 REST API URL 端點的回傳網址替換為使用環境變數 `$CODESPACE_NAME` 的
    `https://$CODESPACE_NAME-8000.app.github.dev`，以供 Django 使用，並避免 HTTPS 憑證問題。

@@ -207,4 +207,8 @@ npm test --prefix octofit-tracker/frontend
 
 **使用 GitHub Copilot Agent Mode 打造** 🚀
 
+## 在 GitHub Codespaces 中運行
+若在 GitHub Codespaces 中啟動後端，系統會讀取環境變數 `CODESPACE_NAME` 並自動將根路徑與 API 基底 URL 指向：
+`https://$CODESPACE_NAME-8000.app.github.dev`。若未設定 `CODESPACE_NAME`，則會回退為相對路徑 `/api`（不再硬編碼 localhost 與埠號），以避免對特定 host 的假設。
+
 
